@@ -30,7 +30,7 @@
         </span>
         JIMU Task Swift
       </a>
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium" aria-label="メインナビゲーション">
+      <nav id="landing-nav" class="hidden md:flex items-center gap-8 text-sm font-medium" aria-label="メインナビゲーション">
         <a href="#features" class="hover:text-blue-900">特徴</a>
         <a href="#target" class="hover:text-blue-900">対象の方</a>
         <a href="#tools" class="hover:text-blue-900">ツール</a>
@@ -40,13 +40,14 @@
         <button type="button" data-auth-open="login" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 hover:bg-slate-100 rounded-lg">ログイン</button>
         <button type="button" data-auth-open="signup" class="px-3 sm:px-4 py-2 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-lg shadow-sm">無料登録</button>
       </div>
-      <div id="auth-user" class="hidden flex items-center gap-2">
-        <a href="#" id="mypage-link" class="px-3 sm:px-4 py-2 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-lg shadow-sm">マイページ</a>
-        <button type="button" id="logout-btn" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 hover:bg-slate-100 rounded-lg">ログアウト</button>
+      <div id="auth-user" class="hidden flex items-center gap-2 sm:gap-3 min-w-0">
+        <span id="header-avatar" class="w-8 h-8 shrink-0 rounded-full bg-blue-900 text-white text-sm font-bold flex items-center justify-center" aria-hidden="true"></span>
+        <span id="header-email" class="hidden sm:block max-w-[14rem] truncate text-sm font-medium text-slate-700"></span>
+        <button type="button" id="logout-btn" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 border border-slate-300 hover:bg-slate-100 rounded-lg">ログアウト</button>
       </div>
     </div>
     <!-- Mobile nav -->
-    <nav class="md:hidden border-t border-slate-200 bg-white overflow-x-auto" aria-label="モバイルナビゲーション">
+    <nav id="landing-mobile-nav" class="md:hidden border-t border-slate-200 bg-white overflow-x-auto" aria-label="モバイルナビゲーション">
       <div class="flex justify-around gap-4 px-4 py-2 text-xs font-medium whitespace-nowrap">
         <a href="#features">特徴</a>
         <a href="#target">対象の方</a>
@@ -56,6 +57,7 @@
     </nav>
   </header>
 
+  <div id="view-landing">
   <main id="top">
     <!-- Hero -->
     <section class="pt-32 md:pt-40 pb-20 md:pb-28 bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900 text-white">
@@ -205,6 +207,127 @@
       </div>
     </div>
   </footer>
+  </div>
+
+  <!-- Dashboard (ログイン後) -->
+  <div id="view-dashboard" class="hidden pt-16 min-h-screen bg-slate-100">
+    <div class="max-w-6xl mx-auto px-4 py-10 space-y-10">
+
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+        <div>
+          <p class="text-sm font-bold text-blue-900 tracking-widest">DASHBOARD</p>
+          <h1 id="dash-welcome" class="mt-1 text-2xl md:text-3xl font-black text-slate-900 break-all"></h1>
+        </div>
+        <p class="text-xs text-slate-500">データはすべてお使いの端末内で処理されます</p>
+      </div>
+
+      <!-- User status -->
+      <section aria-labelledby="status-title">
+        <h2 id="status-title" class="sr-only">ご利用状況</h2>
+        <div class="grid lg:grid-cols-3 gap-6">
+          <article class="rounded-2xl bg-gradient-to-br from-slate-900 to-blue-900 text-white p-6 shadow-md">
+            <div class="flex items-center gap-4">
+              <span id="dash-avatar" class="w-14 h-14 shrink-0 rounded-full bg-sky-400 text-slate-900 text-xl font-black flex items-center justify-center" aria-hidden="true"></span>
+              <div class="min-w-0">
+                <p class="text-xs text-blue-200">ログイン中のアカウント</p>
+                <p id="dash-email" class="font-bold truncate"></p>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-sm">
+              <span class="text-blue-200">現在のプラン</span>
+              <span class="px-3 py-1 rounded-full bg-white/15 font-bold">フリープラン</span>
+            </div>
+          </article>
+
+          <article class="rounded-2xl bg-white border border-slate-200 p-6 shadow-md">
+            <p class="text-sm font-bold text-slate-900">無料枠の残り <span class="text-xs font-normal text-slate-400">（サンプル表示）</span></p>
+            <p class="mt-3 text-3xl font-black text-blue-900">7<span class="text-base font-bold text-slate-500"> / 10 回</span></p>
+            <div class="mt-4 h-2 rounded-full bg-slate-200 overflow-hidden" role="progressbar" aria-valuenow="7" aria-valuemin="0" aria-valuemax="10" aria-label="無料枠の残り回数">
+              <div class="h-full w-[70%] rounded-full bg-blue-900"></div>
+            </div>
+            <p class="mt-3 text-xs text-slate-500">買い切りプラン（1,000円〜）で無制限にご利用いただけます。</p>
+          </article>
+
+          <article class="rounded-2xl bg-white border border-slate-200 p-6 shadow-md">
+            <p class="text-sm font-bold text-slate-900">直近の作業実績 <span class="text-xs font-normal text-slate-400">（サンプル表示）</span></p>
+            <ul class="mt-3 space-y-3 text-sm">
+              <li class="flex items-center justify-between gap-2"><span class="truncate">Excel/CSVデータ一括結合</span><span class="shrink-0 text-xs text-slate-400">今日</span></li>
+              <li class="flex items-center justify-between gap-2"><span class="truncate">文字ゆれ一発クレンジング</span><span class="shrink-0 text-xs text-slate-400">昨日</span></li>
+              <li class="flex items-center justify-between gap-2"><span class="truncate">ファイル自動分割ツール</span><span class="shrink-0 text-xs text-slate-400">3日前</span></li>
+            </ul>
+            <p class="mt-4 text-xs text-slate-500">今月の処理時間の削減目安：約 2.5 時間</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Tools -->
+      <section aria-labelledby="tools-title">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <h2 id="tools-title" class="text-xl font-black text-slate-900">ツール一覧</h2>
+          <label class="inline-flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+            <input id="fav-only" type="checkbox" class="w-4 h-4 rounded border-slate-300 text-blue-900 focus:ring-blue-900">
+            お気に入りのみ表示
+          </label>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <article data-tool="merge" class="group flex flex-col rounded-2xl bg-white border border-slate-200 p-6 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-blue-100 text-blue-900 flex items-center justify-center" aria-hidden="true">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>
+              </span>
+              <button type="button" data-fav aria-pressed="false" aria-label="お気に入りに追加・解除" class="text-slate-300 hover:text-amber-500 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.5a.56.56 0 011.04 0l2.12 5.11a.56.56 0 00.48.35l5.52.44c.5.04.7.66.32.99l-4.2 3.6a.56.56 0 00-.18.56l1.28 5.39a.56.56 0 01-.84.61l-4.73-2.89a.56.56 0 00-.58 0l-4.73 2.89a.56.56 0 01-.84-.61l1.28-5.39a.56.56 0 00-.18-.56l-4.2-3.6a.56.56 0 01.32-.99l5.52-.44a.56.56 0 00.48-.35l2.12-5.11z"/></svg>
+              </button>
+            </div>
+            <h3 class="mt-4 text-lg font-bold text-slate-900">Excel/CSVデータ一括結合</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">フォーマットの異なる複数ファイルを、列をそろえて1つにまとめます。コピペ作業はもう不要です。</p>
+            <button type="button" data-open-tool="Excel/CSVデータ一括結合" class="mt-5 w-full py-2.5 rounded-lg bg-blue-900 text-white text-sm font-bold hover:bg-blue-800 transition">ツールを開く</button>
+          </article>
+
+          <article data-tool="cleanse" class="group flex flex-col rounded-2xl bg-white border border-slate-200 p-6 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-blue-100 text-blue-900 flex items-center justify-center" aria-hidden="true">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16 2.29 6.86L21 12l-6.71 2.14L12 21l-2.29-6.86L3 12l6.71-2.14L12 3z"/></svg>
+              </span>
+              <button type="button" data-fav aria-pressed="false" aria-label="お気に入りに追加・解除" class="text-slate-300 hover:text-amber-500 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.5a.56.56 0 011.04 0l2.12 5.11a.56.56 0 00.48.35l5.52.44c.5.04.7.66.32.99l-4.2 3.6a.56.56 0 00-.18.56l1.28 5.39a.56.56 0 01-.84.61l-4.73-2.89a.56.56 0 00-.58 0l-4.73 2.89a.56.56 0 01-.84-.61l1.28-5.39a.56.56 0 00-.18-.56l-4.2-3.6a.56.56 0 01.32-.99l5.52-.44a.56.56 0 00.48-.35l2.12-5.11z"/></svg>
+              </button>
+            </div>
+            <h3 class="mt-4 text-lg font-bold text-slate-900">文字ゆれ一発クレンジング</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">全角・半角、表記ゆれ、余分なスペースを自動で統一。取引先名や住所もきれいにそろいます。</p>
+            <button type="button" data-open-tool="文字ゆれ一発クレンジング" class="mt-5 w-full py-2.5 rounded-lg bg-blue-900 text-white text-sm font-bold hover:bg-blue-800 transition">ツールを開く</button>
+          </article>
+
+          <article data-tool="split" class="group flex flex-col rounded-2xl bg-white border border-slate-200 p-6 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-blue-100 text-blue-900 flex items-center justify-center" aria-hidden="true">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10-4-4m4 4 4-4M15 7v10m0-10-4 4m4-4 4 4"/></svg>
+              </span>
+              <button type="button" data-fav aria-pressed="false" aria-label="お気に入りに追加・解除" class="text-slate-300 hover:text-amber-500 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.5a.56.56 0 011.04 0l2.12 5.11a.56.56 0 00.48.35l5.52.44c.5.04.7.66.32.99l-4.2 3.6a.56.56 0 00-.18.56l1.28 5.39a.56.56 0 01-.84.61l-4.73-2.89a.56.56 0 00-.58 0l-4.73 2.89a.56.56 0 01-.84-.61l1.28-5.39a.56.56 0 00-.18-.56l-4.2-3.6a.56.56 0 01.32-.99l5.52-.44a.56.56 0 00.48-.35l2.12-5.11z"/></svg>
+              </button>
+            </div>
+            <h3 class="mt-4 text-lg font-bold text-slate-900">ファイル自動分割ツール</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">取引先別・部署別・件数ごとに、大きなファイルを自動で分割して保存します。</p>
+            <button type="button" data-open-tool="ファイル自動分割ツール" class="mt-5 w-full py-2.5 rounded-lg bg-blue-900 text-white text-sm font-bold hover:bg-blue-800 transition">ツールを開く</button>
+          </article>
+
+        </div>
+        <p id="fav-empty" class="hidden mt-6 text-center text-sm text-slate-500">お気に入りのツールはまだありません。☆ を押して追加できます。</p>
+      </section>
+    </div>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between gap-3 text-sm text-slate-500">
+        <nav class="flex gap-6" aria-label="フッターナビゲーション">
+          <a href="#" class="hover:text-blue-900">利用規約</a>
+          <a href="#" class="hover:text-blue-900">プライバシーポリシー</a>
+        </nav>
+        <p>&copy; 2026 JIMU Task Swift. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
 
   <!-- Auth Modal -->
   <div id="auth-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="auth-title">
@@ -232,6 +355,7 @@
                  class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
         </div>
         <p data-error class="hidden text-sm text-red-600" role="alert"></p>
+        <p data-success class="hidden text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-3" role="status"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-blue-900 text-white font-bold hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed">ログイン</button>
         <p class="text-center text-sm text-slate-500">
           アカウントをお持ちでない方は<button type="button" data-auth-switch="signup" class="text-blue-900 font-bold underline hover:no-underline">こちら（新規登録へ）</button>
@@ -284,18 +408,89 @@
 
       const guestBox = document.getElementById('auth-guest');
       const userBox = document.getElementById('auth-user');
-      const mypageLink = document.getElementById('mypage-link');
+      const landingView = document.getElementById('view-landing');
+      const dashView = document.getElementById('view-dashboard');
+      const landingNav = document.getElementById('landing-nav');
+      const landingMobileNav = document.getElementById('landing-mobile-nav');
+      let currentUserId = null;
+
+      const FAV_KEY = function () { return 'jts_favs_' + currentUserId; };
+      function loadFavs() {
+        try { return JSON.parse(localStorage.getItem(FAV_KEY()) || '[]'); } catch (_) { return []; }
+      }
+      function saveFavs(list) {
+        try { localStorage.setItem(FAV_KEY(), JSON.stringify(list)); } catch (_) { /* 保存不可でも動作は継続 */ }
+      }
+
+      const favOnly = document.getElementById('fav-only');
+      function applyFavs() {
+        const favs = loadFavs();
+        document.querySelectorAll('[data-tool]').forEach(function (card) {
+          const on = favs.indexOf(card.dataset.tool) !== -1;
+          const btn = card.querySelector('[data-fav]');
+          btn.setAttribute('aria-pressed', String(on));
+          btn.classList.toggle('text-amber-500', on);
+          btn.classList.toggle('text-slate-300', !on);
+          btn.querySelector('svg').setAttribute('fill', on ? 'currentColor' : 'none');
+          card.classList.toggle('hidden', favOnly.checked && !on);
+        });
+        document.getElementById('fav-empty').classList.toggle('hidden',
+          !(favOnly.checked && favs.length === 0));
+      }
+
+      document.querySelectorAll('[data-fav]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const id = btn.closest('[data-tool]').dataset.tool;
+          const favs = loadFavs();
+          const i = favs.indexOf(id);
+          if (i === -1) favs.push(id); else favs.splice(i, 1);
+          saveFavs(favs);
+          applyFavs();
+        });
+      });
+      favOnly.addEventListener('change', applyFavs);
+      document.querySelectorAll('[data-open-tool]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          alert('「' + btn.dataset.openTool + '」は現在準備中です。公開までしばらくお待ちください。');
+        });
+      });
 
       function renderAuth(session) {
-        const loggedIn = !!(session && session.user);
+        const user = session && session.user;
+        const loggedIn = !!user;
         guestBox.classList.toggle('hidden', loggedIn);
         userBox.classList.toggle('hidden', !loggedIn);
-        mypageLink.title = loggedIn ? session.user.email : '';
+        landingView.classList.toggle('hidden', loggedIn);
+        dashView.classList.toggle('hidden', !loggedIn);
+        landingNav.classList.toggle('md:flex', !loggedIn);
+        landingMobileNav.classList.toggle('hidden', loggedIn);
+        if (loggedIn) {
+          currentUserId = user.id;
+          const email = user.email || '';
+          document.getElementById('header-email').textContent = email;
+          document.getElementById('header-avatar').textContent = (email[0] || '?').toUpperCase();
+          document.getElementById('dash-avatar').textContent = (email[0] || '?').toUpperCase();
+          document.getElementById('dash-email').textContent = email;
+          document.getElementById('dash-welcome').textContent = 'ようこそ、' + (email.split('@')[0] || 'ユーザー') + ' さん';
+          applyFavs();
+        } else {
+          currentUserId = null;
+        }
+        window.scrollTo(0, 0);
+      }
+
+      let lastUserId;
+      function handleSession(session) {
+        const id = session && session.user ? session.user.id : null;
+        if (id === lastUserId) return; // トークン更新などでの再描画を避ける
+        lastUserId = id;
+        renderAuth(session);
+        if (id) closeModal();
       }
 
       if (sb) {
-        sb.auth.getSession().then(function (r) { renderAuth(r.data.session); });
-        sb.auth.onAuthStateChange(function (_event, session) { renderAuth(session); });
+        sb.auth.getSession().then(function (r) { handleSession(r.data.session); });
+        sb.auth.onAuthStateChange(function (_event, session) { handleSession(session); });
         document.getElementById('logout-btn').addEventListener('click', async function () {
           const { error } = await sb.auth.signOut();
           if (error) alert('ログアウトに失敗しました：' + error.message);
@@ -353,7 +548,7 @@
         modal.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
         Object.values(forms).forEach(function (f) { f.reset(); });
-        if (lastFocused) lastFocused.focus();
+        if (lastFocused && document.contains(lastFocused) && lastFocused.offsetParent !== null) lastFocused.focus();
       }
 
       document.querySelectorAll('[data-auth-open]').forEach(function (btn) {
@@ -427,9 +622,14 @@
             closeModal();
             return;
           }
-          ok.textContent = '確認メールを送信しました。メール内のリンクをクリックして登録を完了してください。';
-          ok.classList.remove('hidden');
+          // メール確認が必要な場合：ログイン画面へ切り替えて案内を表示
           f.reset();
+          showMode('login');
+          forms.login.email.value = email;
+          const info = forms.login.querySelector('[data-success]');
+          info.textContent = '確認メールを送信しました。メールをご確認のうえログインしてください。';
+          info.classList.remove('hidden');
+          forms.login.password.focus();
         } catch (err) {
           fail(f, authMessage(err));
         } finally {
