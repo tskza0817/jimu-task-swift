@@ -260,6 +260,21 @@
         </div>
       </section>
 
+      <!-- 新着ツールのご案内：新ツール追加時はこのカードの文言・リンクを更新 -->
+      <section aria-labelledby="news-title">
+        <article class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-500 to-blue-800 text-white p-6 sm:p-8 shadow-lg">
+          <div class="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/10" aria-hidden="true"></div>
+          <div class="relative flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+            <span class="shrink-0 self-start px-3 py-1 rounded-full bg-amber-300 text-slate-900 text-xs font-black tracking-wide">NEW</span>
+            <div class="flex-1">
+              <h2 id="news-title" class="text-lg sm:text-xl font-black">新着ツールのご案内</h2>
+              <p class="mt-1 text-sm text-sky-50 leading-relaxed">新しいツールを順次追加予定です。追加されたツールはこのダッシュボードにお知らせします。ぜひご期待ください。</p>
+            </div>
+            <a href="#tools-title" class="shrink-0 self-start sm:self-center px-5 py-2.5 rounded-lg bg-white text-blue-900 text-sm font-bold hover:bg-sky-50 transition">ツール一覧を見る</a>
+          </div>
+        </article>
+      </section>
+
       <!-- Tools -->
       <section aria-labelledby="tools-title">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
@@ -365,6 +380,11 @@
       <!-- Signup -->
       <form id="form-signup" class="hidden space-y-4" novalidate>
         <div>
+          <label for="signup-name" class="block text-sm font-medium text-slate-700 mb-1">お名前（フルネーム）</label>
+          <input id="signup-name" name="full_name" type="text" required maxlength="50" autocomplete="name" placeholder="例：事務 太郎"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
           <label for="signup-email" class="block text-sm font-medium text-slate-700 mb-1">メールアドレス</label>
           <input id="signup-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"
                  class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
@@ -455,6 +475,12 @@
         });
       });
 
+      function displayName(user) {
+        const meta = user && user.user_metadata;
+        const name = meta && typeof meta.full_name === 'string' ? meta.full_name.trim() : '';
+        return name || ((user.email || '').split('@')[0] || 'ユーザー');
+      }
+
       function renderAuth(session) {
         const user = session && session.user;
         const loggedIn = !!user;
@@ -467,12 +493,24 @@
         if (loggedIn) {
           currentUserId = user.id;
           const email = user.email || '';
+          const initial = (displayName(user)[0] || '?').toUpperCase();
           document.getElementById('header-email').textContent = email;
-          document.getElementById('header-avatar').textContent = (email[0] || '?').toUpperCase();
-          document.getElementById('dash-avatar').textContent = (email[0] || '?').toUpperCase();
+          document.getElementById('header-avatar').textContent = initial;
+          document.getElementById('dash-avatar').textContent = initial;
           document.getElementById('dash-email').textContent = email;
-          document.getElementById('dash-welcome').textContent = 'ようこそ、' + (email.split('@')[0] || 'ユーザー') + ' さん';
+          document.getElementById('dash-welcome').textContent = displayName(user) + '様、おかえりなさい！';
           applyFavs();
+          // 最新のユーザー情報（user_metadata.full_name）を取得して表示を更新
+          if (sb) {
+            sb.auth.getUser().then(function (r) {
+              const u = r.data && r.data.user;
+              if (!u || u.id !== currentUserId) return;
+              document.getElementById('dash-welcome').textContent = displayName(u) + '様、おかえりなさい！';
+              const ini = (displayName(u)[0] || '?').toUpperCase();
+              document.getElementById('header-avatar').textContent = ini;
+              document.getElementById('dash-avatar').textContent = ini;
+            }).catch(function () { /* セッション由来の表示を維持 */ });
+          }
         } else {
           currentUserId = null;
         }
@@ -599,8 +637,10 @@
         f.querySelector('[data-error]').classList.add('hidden');
         const ok = f.querySelector('[data-success]');
         ok.classList.add('hidden');
+        const fullName = f.full_name.value.trim();
         const email = f.email.value.trim();
         const password = f.password.value;
+        if (!fullName) return fail(f, 'お名前（フルネーム）を入力してください。');
         if (!email || !f.email.checkValidity()) return fail(f, 'メールアドレスを正しく入力してください。');
         if (password.length < 8) return fail(f, 'パスワードは8文字以上で入力してください。');
         if (password !== f.password2.value) return fail(f, 'パスワードが一致しません。');
@@ -611,7 +651,10 @@
           const { data, error } = await sb.auth.signUp({
             email,
             password,
-            options: { emailRedirectTo: window.location.origin + window.location.pathname }
+            options: {
+              data: { full_name: fullName },
+              emailRedirectTo: window.location.origin + window.location.pathname
+            }
           });
           if (error) return fail(f, authMessage(error));
           // 登録済みメールの場合、確認メール有効時はエラーではなく identities が空で返る
