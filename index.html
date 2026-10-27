@@ -35,6 +35,7 @@
         <a href="#target" class="hover:text-blue-900">対象の方</a>
         <a href="#tools" class="hover:text-blue-900">ツール</a>
         <a href="#security" class="hover:text-blue-900">安心設計</a>
+        <button type="button" data-contact-open class="hover:text-blue-900">お問い合わせ</button>
       </nav>
       <div id="auth-guest" class="flex items-center gap-2">
         <button type="button" data-auth-open="login" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 hover:bg-slate-100 rounded-lg">ログイン</button>
@@ -200,9 +201,10 @@
     </div>
     <div class="border-t border-slate-800">
       <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between gap-3">
-        <nav class="flex gap-6" aria-label="フッターナビゲーション">
+        <nav class="flex flex-wrap items-center gap-6" aria-label="フッターナビゲーション">
           <a href="terms.html" class="hover:text-white">利用規約</a>
           <a href="privacy.html" class="hover:text-white">プライバシーポリシー</a>
+          <button type="button" data-contact-open class="px-4 py-1.5 rounded-lg border border-slate-600 text-slate-200 hover:bg-slate-800 hover:text-white transition">お問い合わせ</button>
         </nav>
         <p>&copy; 2026 JIMU Task Swift. All rights reserved.</p>
       </div>
@@ -336,15 +338,57 @@
 
     <footer class="border-t border-slate-200 bg-white">
       <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between gap-3 text-sm text-slate-500">
-        <nav class="flex gap-6" aria-label="フッターナビゲーション">
+        <nav class="flex flex-wrap items-center gap-6" aria-label="フッターナビゲーション">
           <a href="terms.html" class="hover:text-blue-900">利用規約</a>
           <a href="privacy.html" class="hover:text-blue-900">プライバシーポリシー</a>
+          <button type="button" data-contact-open class="px-4 py-1.5 rounded-lg border border-slate-300 text-blue-900 hover:bg-slate-100 transition">お問い合わせ</button>
         </nav>
         <p>&copy; 2026 JIMU Task Swift. All rights reserved.</p>
       </div>
     </footer>
   </div>
 
+  <!-- Contact Modal -->
+  <div id="contact-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+    <div class="relative w-full max-w-lg my-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+      <button type="button" id="contact-close" aria-label="閉じる" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">✕</button>
+      <h2 id="contact-title" class="text-xl font-black text-slate-900">お問い合わせ</h2>
+      <p class="mt-1 text-sm text-slate-500">内容を入力すると、お使いのメールアプリが起動し、運営者宛のメールが作成されます。</p>
+      <form id="contact-form" class="mt-5 space-y-4" novalidate>
+        <div>
+          <label for="contact-name" class="block text-sm font-medium text-slate-700 mb-1">お名前</label>
+          <input id="contact-name" name="name" type="text" required maxlength="50" autocomplete="name"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
+          <label for="contact-email" class="block text-sm font-medium text-slate-700 mb-1">ご連絡先メールアドレス</label>
+          <input id="contact-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
+          <label for="contact-category" class="block text-sm font-medium text-slate-700 mb-1">お問い合わせ種別</label>
+          <select id="contact-category" name="category" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+            <option>サービスについて</option>
+            <option>ツールの使い方・不具合</option>
+            <option>ご購入・お支払い</option>
+            <option>個人情報の開示・削除請求</option>
+            <option>特商法表記の開示請求（所在地・電話番号）</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div>
+          <label for="contact-message" class="block text-sm font-medium text-slate-700 mb-1">お問い合わせ内容</label>
+          <textarea id="contact-message" name="message" rows="6" required maxlength="2000"
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none"></textarea>
+          <p class="mt-1 text-xs text-slate-400">パスワードや機密データは記載しないでください。</p>
+        </div>
+        <p id="contact-error" class="hidden text-sm text-red-600" role="alert"></p>
+        <button type="submit" class="w-full py-3 rounded-lg bg-blue-900 text-white font-bold hover:bg-blue-800 transition">メールを作成して送信</button>
+        <p class="text-center text-xs text-slate-500">メールアプリが起動しない場合は <a href="mailto:tskza.0817@gmail.com" class="text-blue-900 underline">tskza.0817@gmail.com</a> まで直接ご連絡ください。</p>
+      </form>
+    </div>
+  </div>
+
   <!-- Auth Modal -->
   <div id="auth-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="auth-title">
     <div class="relative w-full max-w-md my-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
@@ -433,7 +477,60 @@
       const dashView = document.getElementById('view-dashboard');
       const landingNav = document.getElementById('landing-nav');
       const landingMobileNav = document.getElementById('landing-mobile-nav');
+      // お問い合わせ（mailto方式）
+      const CONTACT_TO = 'tskza.0817@gmail.com';
+      const contactModal = document.getElementById('contact-modal');
+      const contactForm = document.getElementById('contact-form');
+      const contactError = document.getElementById('contact-error');
+      let contactLastFocused = null;
+
+      function openContact() {
+        contactLastFocused = document.activeElement;
+        contactError.classList.add('hidden');
+        contactModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        if (currentUserEmail && !contactForm.email.value) contactForm.email.value = currentUserEmail;
+        if (currentUserName && !contactForm.name.value) contactForm.name.value = currentUserName;
+        contactForm.name.focus();
+      }
+      function closeContact() {
+        contactModal.classList.add('hidden');
+        if (authModalIsClosed()) document.body.classList.remove('overflow-hidden');
+        if (contactLastFocused && contactLastFocused.offsetParent !== null) contactLastFocused.focus();
+      }
+      function authModalIsClosed() { return modal.classList.contains('hidden'); }
+
+      document.querySelectorAll('[data-contact-open]').forEach(function (b) { b.addEventListener('click', openContact); });
+      document.getElementById('contact-close').addEventListener('click', closeContact);
+      contactModal.addEventListener('click', function (e) { if (e.target === contactModal) closeContact(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !contactModal.classList.contains('hidden')) closeContact();
+      });
+
+      contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const f = contactForm;
+        const name = f.name.value.trim();
+        const email = f.email.value.trim();
+        const message = f.message.value.trim();
+        contactError.classList.add('hidden');
+        if (!name || !email || !f.email.checkValidity() || !message) {
+          contactError.textContent = 'お名前・メールアドレス・お問い合わせ内容を正しく入力してください。';
+          contactError.classList.remove('hidden');
+          return;
+        }
+        const subject = '【JIMU Task Swift】' + f.category.value;
+        const body = 'お名前：' + name + '\r\nご連絡先：' + email + '\r\n種別：' + f.category.value +
+          '\r\n\r\n' + message + '\r\n';
+        window.location.href = 'mailto:' + CONTACT_TO + '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+        f.message.value = '';
+        closeContact();
+      });
+
       let currentUserId = null;
+      let currentUserEmail = '';
+      let currentUserName = '';
 
       const FAV_KEY = function () { return 'jts_favs_' + currentUserId; };
       function loadFavs() {
@@ -493,6 +590,8 @@
         landingMobileNav.classList.toggle('hidden', loggedIn);
         if (loggedIn) {
           currentUserId = user.id;
+          currentUserEmail = user.email || '';
+          currentUserName = (user.user_metadata && user.user_metadata.full_name) || '';
           const email = user.email || '';
           const initial = (displayName(user)[0] || '?').toUpperCase();
           document.getElementById('header-email').textContent = email;
@@ -514,6 +613,9 @@
           }
         } else {
           currentUserId = null;
+          currentUserEmail = '';
+          currentUserName = '';
+          contactForm.reset();
         }
         window.scrollTo(0, 0);
       }
