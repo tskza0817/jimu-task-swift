@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JIMU Task Swift | 事務作業・データ整形を、驚くほどスウィフトに</title>
+  <meta name="description" content="社外にデータを送信しない完全ローカル処理。買い切り1,000円から始めるバックオフィス業務効率化プラットフォーム。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-700 font-sans antialiased">
+
+  <!-- Header -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2 font-black text-blue-900 text-lg">
+        <span class="inline-flex w-8 h-8 rounded-lg bg-blue-900 text-white items-center justify-center" aria-hidden="true">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M11 2 4 11h5l-1 7 8-10h-5l0-6z"/></svg>
+        </span>
+        JIMU Task Swift
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium" aria-label="メインナビゲーション">
+        <a href="#features" class="hover:text-blue-900">特徴</a>
+        <a href="#target" class="hover:text-blue-900">対象の方</a>
+        <a href="#tools" class="hover:text-blue-900">ツール</a>
+        <a href="#security" class="hover:text-blue-900">安心設計</a>
+      </nav>
+      <div id="auth-guest" class="flex items-center gap-2">
+        <button type="button" data-auth-open="login" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 hover:bg-slate-100 rounded-lg">ログイン</button>
+        <button type="button" data-auth-open="signup" class="px-3 sm:px-4 py-2 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-lg shadow-sm">無料登録</button>
+      </div>
+      <div id="auth-user" class="hidden flex items-center gap-2">
+        <a href="#" id="mypage-link" class="px-3 sm:px-4 py-2 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-lg shadow-sm">マイページ</a>
+        <button type="button" id="logout-btn" class="px-3 sm:px-4 py-2 text-sm font-medium text-blue-900 hover:bg-slate-100 rounded-lg">ログアウト</button>
+      </div>
+    </div>
+    <!-- Mobile nav -->
+    <nav class="md:hidden border-t border-slate-200 bg-white overflow-x-auto" aria-label="モバイルナビゲーション">
+      <div class="flex justify-around gap-4 px-4 py-2 text-xs font-medium whitespace-nowrap">
+        <a href="#features">特徴</a>
+        <a href="#target">対象の方</a>
+        <a href="#tools">ツール</a>
+        <a href="#security">安心設計</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="pt-32 md:pt-40 pb-20 md:pb-28 bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900 text-white">
+      <div class="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+        <div class="text-center lg:text-left">
+          <p class="inline-block mb-6 px-4 py-1 rounded-full bg-white/10 border border-white/20 text-xs md:text-sm tracking-wide">
+            完全ローカル処理 ・ 買い切り1,000円から
+          </p>
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight md:leading-tight">
+            毎日の事務作業・データ整形を、<br class="hidden sm:block">驚くほど<span class="text-sky-300">スウィフト（迅速）</span>に。
+          </h1>
+          <p class="mt-6 text-base md:text-lg text-slate-300 leading-relaxed">
+            社外にデータを送信しない完全ローカル処理。<br class="hidden sm:block">買い切り1,000円から始めるバックオフィス改革。
+          </p>
+          <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <button type="button" data-auth-open="signup" class="px-8 py-3 rounded-lg bg-sky-400 text-slate-900 font-bold hover:bg-sky-300 transition">無料で始める</button>
+            <a href="#tools" class="px-8 py-3 rounded-lg border border-white/30 font-bold hover:bg-white/10 transition">使い方を見る</a>
+          </div>
+        </div>
+        <figure class="relative">
+          <div class="absolute -inset-3 rounded-3xl bg-sky-400/20 blur-2xl" aria-hidden="true"></div>
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
+               alt="明るく洗練されたモダンなオフィス" width="1200" height="800" fetchpriority="high"
+               class="relative w-full aspect-[4/3] object-cover rounded-2xl shadow-2xl ring-1 ring-white/20">
+          <figcaption class="absolute -bottom-5 left-4 sm:left-6 flex items-center gap-2 bg-white text-slate-800 text-xs sm:text-sm font-bold px-4 py-3 rounded-xl shadow-md">
+            <span class="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span>データは端末の外に出ません
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Target -->
+    <section id="target" class="py-20 scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <p class="text-sm font-bold text-blue-900 tracking-widest">TARGET</p>
+          <h2 class="mt-2 text-2xl md:text-3xl font-black text-slate-900">こんな方のためのツールです</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md hover:shadow-xl transition">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80"
+                 alt="オフィスで協力して事務作業に取り組むチーム" width="1000" height="625" loading="lazy"
+                 class="w-full aspect-[16/10] object-cover">
+            <div class="p-8">
+              <h3 class="text-lg font-bold text-slate-900">中小企業のバックオフィス担当者</h3>
+              <p class="mt-3 text-sm leading-relaxed">毎月繰り返すExcel・CSVの集計や変換作業を、専門知識がなくても短時間で。限られた人数でも業務を回せるようにします。</p>
+            </div>
+          </article>
+          <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md hover:shadow-xl transition">
+            <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1000&q=80"
+                 alt="ノートパソコンで一人集中して作業するフリーランス" width="1000" height="625" loading="lazy"
+                 class="w-full aspect-[16/10] object-cover">
+            <div class="p-8">
+              <h3 class="text-lg font-bold text-slate-900">経理・人事・受発注を請け負うフリーランス / BPO代行者</h3>
+              <p class="mt-3 text-sm leading-relaxed">クライアントごとに異なるフォーマットを素早く整形。預かったデータを外部に出さないため、安心して業務を受託できます。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-20 bg-white scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <p class="text-sm font-bold text-blue-900 tracking-widest">FEATURES</p>
+          <h2 class="mt-2 text-2xl md:text-3xl font-black text-slate-900">主なメリット＆機能</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="rounded-2xl bg-slate-50 border border-slate-200 p-8">
+            <span class="text-3xl font-black text-blue-900/30">01</span>
+            <h3 class="mt-2 text-lg font-bold text-slate-900">フォーマット違い・コピペ地獄の解消</h3>
+            <p class="mt-3 text-sm leading-relaxed">取引先ごとにバラバラな列構成や形式も、ファイルを読み込むだけで統一。手作業のコピー＆ペーストと転記ミスをなくします。</p>
+          </article>
+          <article id="security" class="rounded-2xl bg-blue-900 text-white p-8 scroll-mt-24">
+            <span class="text-3xl font-black text-white/30">02</span>
+            <h3 class="mt-2 text-lg font-bold">100%端末内処理で安心のセキュリティ</h3>
+            <p class="mt-3 text-sm leading-relaxed text-blue-100">データはあなたの端末の中だけで処理され、サーバーへ送信されません。顧客情報や給与データも、情報漏えいの心配なく扱えます。</p>
+          </article>
+          <article class="rounded-2xl bg-slate-50 border border-slate-200 p-8">
+            <span class="text-3xl font-black text-blue-900/30">03</span>
+            <h3 class="mt-2 text-lg font-bold text-slate-900">誰でも迷わず使える直感的なシンプル操作</h3>
+            <p class="mt-3 text-sm leading-relaxed">難しい設定やマクロの知識は不要。ファイルを選んで実行するだけの分かりやすい画面で、すぐに使い始められます。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <section id="tools" class="py-20 scroll-mt-20">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-10">
+          <p class="text-sm font-bold text-blue-900 tracking-widest">DEMO</p>
+          <h2 class="mt-2 text-2xl md:text-3xl font-black text-slate-900">データ処理が一瞬で完了</h2>
+          <p class="mt-3 text-sm">ファイルを選んで実行するだけ。その手順をご覧ください。</p>
+        </div>
+        <!-- 動画/GIFに差し替えてください -->
+        <div class="aspect-video rounded-2xl border-2 border-dashed border-slate-300 bg-slate-100 flex flex-col items-center justify-center text-slate-500" role="img" aria-label="デモ動画またはGIFの表示予定エリア">
+          <svg class="w-16 h-16 mb-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg>
+          <p class="font-bold">デモ動画 / GIF 掲載予定エリア</p>
+          <p class="text-xs mt-1">16:9 推奨</p>
+        </div>
+        <ol class="mt-8 grid sm:grid-cols-3 gap-4 text-sm">
+          <li class="bg-white rounded-xl border border-slate-200 p-4"><b class="text-blue-900">STEP 1</b><br>Excel/CSVファイルを選択</li>
+          <li class="bg-white rounded-xl border border-slate-200 p-4"><b class="text-blue-900">STEP 2</b><br>ツールを選んで実行</li>
+          <li class="bg-white rounded-xl border border-slate-200 p-4"><b class="text-blue-900">STEP 3</b><br>整形済みデータを保存</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 bg-slate-900 text-white text-center">
+      <div class="max-w-3xl mx-auto px-4">
+        <h2 class="text-xl md:text-2xl font-black">買い切り1,000円から、はじめませんか。</h2>
+        <button type="button" data-auth-open="signup" class="mt-6 inline-block px-8 py-3 rounded-lg bg-sky-400 text-slate-900 font-bold hover:bg-sky-300 transition">無料登録</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 text-sm">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8">
+      <div>
+        <p class="font-black text-white text-lg">JIMU Task Swift</p>
+        <p class="mt-2">安全な完全ローカル環境で、事務作業を一瞬で。</p>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-3">運営者情報（特定商取引法に基づく表記）</h3>
+        <dl class="grid grid-cols-[7rem_1fr] gap-y-2">
+          <dt>運営形態</dt><dd>個人事業主</dd>
+          <dt>運営責任者</dt><dd>【氏名を記載】</dd>
+          <dt>所在地</dt><dd>【請求があった場合遅滞なく開示】</dd>
+          <dt>連絡先</dt><dd>【メールアドレスを記載】</dd>
+          <dt>販売価格</dt><dd>【各ツールのページに記載】</dd>
+          <dt>支払方法</dt><dd>【記載】</dd>
+          <dt>返品・キャンセル</dt><dd>【記載】</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="border-t border-slate-800">
+      <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between gap-3">
+        <nav class="flex gap-6" aria-label="フッターナビゲーション">
+          <a href="#" class="hover:text-white">利用規約</a>
+          <a href="#" class="hover:text-white">プライバシーポリシー</a>
+        </nav>
+        <p>&copy; 2026 JIMU Task Swift. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="relative w-full max-w-md my-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+      <button type="button" id="auth-close" aria-label="閉じる" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">✕</button>
+
+      <div class="text-center mb-6">
+        <span class="inline-flex w-10 h-10 rounded-xl bg-blue-900 text-white items-center justify-center" aria-hidden="true">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11 2 4 11h5l-1 7 8-10h-5l0-6z"/></svg>
+        </span>
+        <h2 id="auth-title" class="mt-3 text-xl font-black text-slate-900"></h2>
+        <p id="auth-sub" class="mt-1 text-sm text-slate-500"></p>
+      </div>
+
+      <!-- Login -->
+      <form id="form-login" class="space-y-4" novalidate>
+        <div>
+          <label for="login-email" class="block text-sm font-medium text-slate-700 mb-1">メールアドレス</label>
+          <input id="login-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
+          <label for="login-password" class="block text-sm font-medium text-slate-700 mb-1">パスワード</label>
+          <input id="login-password" name="password" type="password" required autocomplete="current-password"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <p data-error class="hidden text-sm text-red-600" role="alert"></p>
+        <button type="submit" class="w-full py-3 rounded-lg bg-blue-900 text-white font-bold hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed">ログイン</button>
+        <p class="text-center text-sm text-slate-500">
+          アカウントをお持ちでない方は<button type="button" data-auth-switch="signup" class="text-blue-900 font-bold underline hover:no-underline">こちら（新規登録へ）</button>
+        </p>
+      </form>
+
+      <!-- Signup -->
+      <form id="form-signup" class="hidden space-y-4" novalidate>
+        <div>
+          <label for="signup-email" class="block text-sm font-medium text-slate-700 mb-1">メールアドレス</label>
+          <input id="signup-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
+          <label for="signup-password" class="block text-sm font-medium text-slate-700 mb-1">パスワード <span class="text-xs text-slate-400">（8文字以上）</span></label>
+          <input id="signup-password" name="password" type="password" required minlength="8" autocomplete="new-password"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <div>
+          <label for="signup-password2" class="block text-sm font-medium text-slate-700 mb-1">パスワード（確認用）</label>
+          <input id="signup-password2" name="password2" type="password" required autocomplete="new-password"
+                 class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-900/20 outline-none">
+        </div>
+        <label class="flex items-start gap-2 text-sm text-slate-600">
+          <input id="signup-agree" name="agree" type="checkbox" required class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-900 focus:ring-blue-900">
+          <span><a href="#" class="text-blue-900 underline">利用規約</a>および<a href="#" class="text-blue-900 underline">プライバシーポリシー</a>に同意します</span>
+        </label>
+        <p data-error class="hidden text-sm text-red-600" role="alert"></p>
+        <p data-success class="hidden text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-3" role="status"></p>
+        <button type="submit" class="w-full py-3 rounded-lg bg-blue-900 text-white font-bold hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed">無料で会員登録</button>
+        <p class="text-center text-sm text-slate-500">
+          すでにアカウントをお持ちの方は<button type="button" data-auth-switch="login" class="text-blue-900 font-bold underline hover:no-underline">こちら（ログインへ）</button>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      // ブラウザには公開用キー（sb_publishable_... または旧 anon キー）のみを設定すること。
+      // sb_secret_... / service_role キーは絶対にここへ入れない。
+      const SUPABASE_URL = 'https://lepipjlokxzmopfzkxds.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_QfCHnQNGOlyD5QwLxRsQSg_j_EH3wI2';
+
+      const sb = (SUPABASE_PUBLISHABLE_KEY && window.supabase)
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+        : null;
+      if (!sb) console.warn('Supabaseが未設定です。SUPABASE_PUBLISHABLE_KEY を設定してください。');
+
+      const guestBox = document.getElementById('auth-guest');
+      const userBox = document.getElementById('auth-user');
+      const mypageLink = document.getElementById('mypage-link');
+
+      function renderAuth(session) {
+        const loggedIn = !!(session && session.user);
+        guestBox.classList.toggle('hidden', loggedIn);
+        userBox.classList.toggle('hidden', !loggedIn);
+        mypageLink.title = loggedIn ? session.user.email : '';
+      }
+
+      if (sb) {
+        sb.auth.getSession().then(function (r) { renderAuth(r.data.session); });
+        sb.auth.onAuthStateChange(function (_event, session) { renderAuth(session); });
+        document.getElementById('logout-btn').addEventListener('click', async function () {
+          const { error } = await sb.auth.signOut();
+          if (error) alert('ログアウトに失敗しました：' + error.message);
+        });
+      }
+
+      function authMessage(error) {
+        const m = (error && error.message || '').toLowerCase();
+        if (m.includes('invalid login credentials')) return 'メールアドレスまたはパスワードが正しくありません。';
+        if (m.includes('email not confirmed')) return 'メールアドレスの確認が完了していません。届いた確認メールのリンクを開いてください。';
+        if (m.includes('already registered')) return 'このメールアドレスはすでに登録されています。ログインをお試しください。';
+        if (m.includes('rate limit') || error.status === 429) return '短時間に操作が集中しました。しばらく待ってから再度お試しください。';
+        if (m.includes('password') && m.includes('characters')) return 'パスワードが短すぎます。より長いパスワードを設定してください。';
+        if (m.includes('invalid') && m.includes('email')) return 'メールアドレスの形式が正しくありません。';
+        if (m.includes('failed to fetch') || m.includes('network')) return '通信に失敗しました。ネットワーク接続をご確認ください。';
+        return '処理に失敗しました：' + error.message;
+      }
+
+      const modal = document.getElementById('auth-modal');
+      const title = document.getElementById('auth-title');
+      const sub = document.getElementById('auth-sub');
+      const forms = {
+        login: document.getElementById('form-login'),
+        signup: document.getElementById('form-signup')
+      };
+      const texts = {
+        login: ['ログイン', 'アカウント情報を入力してください'],
+        signup: ['無料会員登録', 'メールアドレスだけで、すぐに始められます']
+      };
+      let lastFocused = null;
+
+      function showMode(mode) {
+        Object.keys(forms).forEach(function (k) {
+          forms[k].classList.toggle('hidden', k !== mode);
+          const err = forms[k].querySelector('[data-error]');
+          err.classList.add('hidden');
+          err.textContent = '';
+          const ok = forms[k].querySelector('[data-success]');
+          if (ok) { ok.classList.add('hidden'); ok.textContent = ''; }
+        });
+        title.textContent = texts[mode][0];
+        sub.textContent = texts[mode][1];
+        const first = forms[mode].querySelector('input');
+        if (first) first.focus();
+      }
+
+      function openModal(mode) {
+        lastFocused = document.activeElement;
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        showMode(mode);
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        Object.values(forms).forEach(function (f) { f.reset(); });
+        if (lastFocused) lastFocused.focus();
+      }
+
+      document.querySelectorAll('[data-auth-open]').forEach(function (btn) {
+        btn.addEventListener('click', function () { openModal(btn.dataset.authOpen); });
+      });
+      document.querySelectorAll('[data-auth-switch]').forEach(function (btn) {
+        btn.addEventListener('click', function () { showMode(btn.dataset.authSwitch); });
+      });
+      document.getElementById('auth-close').addEventListener('click', closeModal);
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+      });
+
+      function fail(form, msg) {
+        const err = form.querySelector('[data-error]');
+        err.textContent = msg;
+        err.classList.remove('hidden');
+      }
+
+      function setBusy(form, busy) {
+        form.querySelector('button[type="submit"]').disabled = busy;
+      }
+
+      forms.login.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const f = forms.login;
+        f.querySelector('[data-error]').classList.add('hidden');
+        const email = f.email.value.trim();
+        const password = f.password.value;
+        if (!email || !f.email.checkValidity() || !password) return fail(f, 'メールアドレスとパスワードを正しく入力してください。');
+        if (!sb) return fail(f, '認証サービスが未設定です。管理者にお問い合わせください。');
+        setBusy(f, true);
+        try {
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) return fail(f, authMessage(error));
+          closeModal();
+        } catch (err) {
+          fail(f, authMessage(err));
+        } finally {
+          setBusy(f, false);
+        }
+      });
+
+      forms.signup.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const f = forms.signup;
+        f.querySelector('[data-error]').classList.add('hidden');
+        const ok = f.querySelector('[data-success]');
+        ok.classList.add('hidden');
+        const email = f.email.value.trim();
+        const password = f.password.value;
+        if (!email || !f.email.checkValidity()) return fail(f, 'メールアドレスを正しく入力してください。');
+        if (password.length < 8) return fail(f, 'パスワードは8文字以上で入力してください。');
+        if (password !== f.password2.value) return fail(f, 'パスワードが一致しません。');
+        if (!f.agree.checked) return fail(f, '利用規約とプライバシーポリシーへの同意が必要です。');
+        if (!sb) return fail(f, '認証サービスが未設定です。管理者にお問い合わせください。');
+        setBusy(f, true);
+        try {
+          const { data, error } = await sb.auth.signUp({
+            email,
+            password,
+            options: { emailRedirectTo: window.location.origin + window.location.pathname }
+          });
+          if (error) return fail(f, authMessage(error));
+          // 登録済みメールの場合、確認メール有効時はエラーではなく identities が空で返る
+          if (data.user && data.user.identities && data.user.identities.length === 0) {
+            return fail(f, 'このメールアドレスはすでに登録されています。ログインをお試しください。');
+          }
+          if (data.session) {
+            closeModal();
+            return;
+          }
+          ok.textContent = '確認メールを送信しました。メール内のリンクをクリックして登録を完了してください。';
+          ok.classList.remove('hidden');
+          f.reset();
+        } catch (err) {
+          fail(f, authMessage(err));
+        } finally {
+          setBusy(f, false);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
