@@ -30,9 +30,9 @@
       <section class="space-y-3">
         <h2 class="text-lg font-black text-slate-900 border-l-4 border-blue-900 pl-3">第1条（事業者情報）</h2>
         <dl class="grid grid-cols-[8rem_1fr] gap-y-1 bg-slate-50 rounded-lg p-4 text-sm">
-          <dt class="font-bold">運営者</dt><dd>JIMU Task Swift 運営者（個人事業主）【氏名を記載】</dd>
-          <dt class="font-bold">所在地</dt><dd>【請求があった場合遅滞なく開示】</dd>
-          <dt class="font-bold">連絡先</dt><dd>【お問い合わせ用メールアドレスを記載】</dd>
+          <dt class="font-bold">運営者</dt><dd>JIMU Task Swift 運営者（個人事業主）青木 俊和</dd>
+          <dt class="font-bold">所在地</dt><dd>請求があった場合、遅滞なく開示いたします。</dd>
+          <dt class="font-bold">連絡先</dt><dd>tskza.0817@gmail.com</dd>
         </dl>
       </section>
 
@@ -44,7 +44,7 @@
           <li><b>認証・セッション情報</b>：ログイン状態を維持するための認証トークン、ユーザー識別子（ID）、登録日時、最終ログイン日時</li>
           <li><b>利用ログ等</b>：アクセス日時、IPアドレス、ブラウザの種類、端末情報、エラー情報等（外部サービスにより自動的に記録される場合を含みます。）</li>
           <li><b>お問い合わせ情報</b>：お問い合わせの際にご提供いただいた氏名、メールアドレス、内容</li>
-          <li><b>決済に関する情報</b>：有料サービスの提供を開始した場合、決済代行事業者を通じた購入履歴等（クレジットカード番号等は当方では保持しません。）</li>
+          <li><b>決済に関する情報</b>：有料サービスの提供を開始した場合、決済代行事業者（Stripe）を通じた購入履歴、決済状況等（クレジットカード番号等のカード情報は、Stripeが直接取得・管理し、当方は保持しません。）</li>
         </ol>
       </section>
 
@@ -96,6 +96,7 @@
         <h2 class="text-lg font-black text-slate-900 border-l-4 border-blue-900 pl-3">第6条（外部サービスの利用）</h2>
         <ol class="list-decimal pl-6 space-y-2">
           <li><b>Supabase</b>：本サービスは、ユーザー認証およびアカウント情報（メールアドレス、パスワード（ハッシュ値）、登録名、認証情報）の保管のために、Supabase, Inc. が提供するサービスを利用しています。これらの情報は、同社が管理するサーバー（国外に所在する場合があります。）で処理・保管されます。同社における取扱いは、同社のプライバシーポリシー等に従います。</li>
+          <li><b>Stripe（決済）</b>：有料サービスの決済には、Stripe, Inc.（およびその関連会社）の決済サービスを利用します。決済時に入力されたカード情報等は、Stripeが直接取得・処理し（国外のサーバーで処理される場合があります。）、同社のプライバシーポリシー等に従って取り扱われます。当方には、購入履歴、決済状況、メールアドレス等が共有されます。</li>
           <li><b>メール配信</b>：確認メール等の送信のため、メール配信サービスを利用する場合があります。</li>
           <li><b>配信ネットワーク（CDN）・フォント等</b>：本サービスは、Tailwind CSS、Supabase JavaScript SDK（jsDelivr）、Google Fonts、画像配信サービス（Unsplash）等を外部から読み込んでいます。これらの読み込みの際に、ユーザーのIPアドレス、ブラウザ情報等が各提供事業者に送信される場合があります。</li>
           <li><b>ホスティング</b>：本サービスの配信のために、ホスティング事業者のサービスを利用する場合があります。</li>
@@ -144,8 +145,8 @@
         <h2 class="text-lg font-black text-slate-900 border-l-4 border-blue-900 pl-3">第11条（お問い合わせ窓口）</h2>
         <p>本ポリシーおよび個人情報の取扱いに関するお問い合わせ、ならびに第9条の請求は、以下の窓口までご連絡ください。</p>
         <dl class="grid grid-cols-[8rem_1fr] gap-y-1 bg-slate-50 rounded-lg p-4 text-sm">
-          <dt class="font-bold">運営者</dt><dd>JIMU Task Swift 運営者（個人事業主）【氏名を記載】</dd>
-          <dt class="font-bold">メール</dt><dd>【お問い合わせ用メールアドレスを記載】</dd>
+          <dt class="font-bold">運営者</dt><dd>JIMU Task Swift 運営者（個人事業主）青木 俊和</dd>
+          <dt class="font-bold">メール</dt><dd>tskza.0817@gmail.com</dd>
         </dl>
       </section>
 
