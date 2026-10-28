@@ -560,15 +560,16 @@
       favOnly.addEventListener('change', applyFavs);
       // Stripe決済リンク（ツールID → URL）。未設定のツールは準備中表示
       const PAYMENT_LINKS = {
-        merge: 'https://buy.stripe.com/dRmcMXcuX9JecQM8u15Ne00',
-        cleanse: 'https://buy.stripe.com/7sY7sDbqT2gM4kgdOl5Ne01',
         split: 'https://buy.stripe.com/14AfZ97aDbRm4kg7pX5Ne02'
       };
+      // 公開済みのツール。未公開（準備中）のツールは購入・ダウンロードできない
+      // 公開時は merge / cleanse を追加し、PAYMENT_LINKS と TOOL_FILES に下記を追記する
+      //   merge:   'https://buy.stripe.com/dRmcMXcuX9JecQM8u15Ne00' / 'merge/excel-csv-merge.zip'
+      //   cleanse: 'https://buy.stripe.com/7sY7sDbqT2gM4kgdOl5Ne01' / 'cleanse/moji-yure-cleanse.zip'
+      const AVAILABLE_TOOLS = ['split'];
       // 非公開Storageバケット "tools" 内のファイルパス（購入者のみ署名付きURLで取得可能）
       const TOOL_FILES = {
-        merge: 'merge/excel-csv-merge.zip',
-        cleanse: 'cleanse/moji-yure-cleanse.zip',
-        split: 'split/file-auto-split.zip'
+        split: 'split/JIMU_task_swift.exe'
       };
       // 購入済みツールID。Supabaseの purchases テーブル（Stripe Webhookが登録）から取得する
       let purchased = [];
@@ -617,15 +618,20 @@
         });
         document.querySelectorAll('[data-tool]').forEach(function (card) {
           const owned = purchased.indexOf(card.dataset.tool) !== -1;
+          const available = AVAILABLE_TOOLS.indexOf(card.dataset.tool) !== -1;
           const btn = card.querySelector('[data-buy]');
-          btn.textContent = owned ? 'ダウンロード' : '購入してダウンロード';
+          btn.textContent = !available ? '準備中' : owned ? 'ダウンロード' : '購入してダウンロード';
           btn.dataset.owned = owned ? '1' : '';
+          btn.disabled = !available;
+          btn.classList.toggle('opacity-50', !available);
+          btn.classList.toggle('cursor-not-allowed', !available);
         });
       }
 
       document.querySelectorAll('[data-buy]').forEach(function (btn) {
         btn.addEventListener('click', function () {
           const id = btn.closest('[data-tool]').dataset.tool;
+          if (AVAILABLE_TOOLS.indexOf(id) === -1) return;
           if (btn.dataset.owned) { downloadTool(id); return; }
           const link = PAYMENT_LINKS[id];
           if (!link || !currentUserId) {
