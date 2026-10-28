@@ -14,7 +14,7 @@ const admin = createClient(
 
 // Payment Link ID（Stripe ダッシュボードの plink_...）→ ツールID
 const TOOL_BY_PAYMENT_LINK: Record<string, string> = {
-  // "plink_xxxxxxxx": "merge",
+  "plink_1UVNEJ0rgTOWGtJJGcDxtxfw": "merge",
 };
 
 Deno.serve(async (req) => {
