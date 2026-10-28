@@ -558,8 +558,47 @@
         });
       });
       favOnly.addEventListener('change', applyFavs);
-      // 購入済みツールID。決済連携後に Supabase の購入記録から取得する（現在は未連携のため空）
-      const purchased = [];
+      // Stripe決済リンク（ツールID → URL）。未設定のツールは準備中表示
+      const PAYMENT_LINKS = {
+        merge: 'https://buy.stripe.com/dRmcMXcuX9JecQM8u15Ne00'
+      };
+      // 非公開Storageバケット "tools" 内のファイルパス（購入者のみ署名付きURLで取得可能）
+      const TOOL_FILES = {
+        merge: 'merge/excel-csv-merge.zip'
+      };
+      // 購入済みツールID。Supabaseの purchases テーブル（Stripe Webhookが登録）から取得する
+      let purchased = [];
+
+      async function fetchPurchases() {
+        if (!sb || !currentUserId) return;
+        const r = await sb.from('purchases').select('tool_id').eq('user_id', currentUserId);
+        if (r.error) { console.warn('購入情報の取得に失敗しました', r.error.message); return; }
+        purchased = r.data.map(function (row) { return row.tool_id; });
+        renderPurchases();
+      }
+
+      async function downloadTool(id) {
+        const path = TOOL_FILES[id];
+        if (!sb || !path) { alert('このツールのダウンロードは準備中です。'); return; }
+        const r = await sb.storage.from('tools').createSignedUrl(path, 60, { download: true });
+        if (r.error || !r.data) {
+          alert('ダウンロードに失敗しました。購入済みの場合は、しばらくしてから再度お試しいただくか、お問い合わせください。');
+          return;
+        }
+        window.location.href = r.data.signedUrl;
+      }
+
+      // 決済完了後に戻ってきた場合、Webhook反映を待ちながら購入情報を再取得する
+      async function pollAfterCheckout() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('purchase') !== 'success') return;
+        history.replaceState(null, '', window.location.pathname);
+        for (let i = 0; i < 10 && purchased.length === 0; i++) {
+          await fetchPurchases();
+          if (purchased.length === 0) await new Promise(function (res) { setTimeout(res, 2000); });
+        }
+        document.getElementById('dash-welcome').scrollIntoView({ behavior: 'smooth' });
+      }
       const toolNames = { merge: 'Excel/CSVデータ一括結合', cleanse: '文字ゆれ一発クレンジング', split: 'ファイル自動分割ツール' };
 
       function renderPurchases() {
@@ -582,8 +621,16 @@
 
       document.querySelectorAll('[data-buy]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          // TODO: 未購入は Stripe Checkout へ、購入済みは署名付きURLでダウンロード
-          alert('「' + btn.dataset.buy + '」の購入・ダウンロードは現在準備中です。公開までしばらくお待ちください。');
+          const id = btn.closest('[data-tool]').dataset.tool;
+          if (btn.dataset.owned) { downloadTool(id); return; }
+          const link = PAYMENT_LINKS[id];
+          if (!link || !currentUserId) {
+            alert('「' + btn.dataset.buy + '」の購入は現在準備中です。公開までしばらくお待ちください。');
+            return;
+          }
+          // client_reference_id でユーザーを特定し、Webhookで購入記録を作成する
+          window.location.href = link + '?client_reference_id=' + encodeURIComponent(currentUserId) +
+            '&prefilled_email=' + encodeURIComponent(currentUserEmail);
         });
       });
 
@@ -614,7 +661,9 @@
           document.getElementById('dash-email').textContent = email;
           document.getElementById('dash-welcome').textContent = displayName(user) + '様、おかえりなさい！';
           applyFavs();
+          purchased = [];
           renderPurchases();
+          fetchPurchases().then(pollAfterCheckout);
           // 最新のユーザー情報（user_metadata.full_name）を取得して表示を更新
           if (sb) {
             sb.auth.getUser().then(function (r) {
