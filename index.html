@@ -560,11 +560,15 @@
       favOnly.addEventListener('change', applyFavs);
       // Stripe決済リンク（ツールID → URL）。未設定のツールは準備中表示
       const PAYMENT_LINKS = {
-        merge: 'https://buy.stripe.com/dRmcMXcuX9JecQM8u15Ne00'
+        merge: 'https://buy.stripe.com/dRmcMXcuX9JecQM8u15Ne00',
+        cleanse: 'https://buy.stripe.com/7sY7sDbqT2gM4kgdOl5Ne01',
+        split: 'https://buy.stripe.com/14AfZ97aDbRm4kg7pX5Ne02'
       };
       // 非公開Storageバケット "tools" 内のファイルパス（購入者のみ署名付きURLで取得可能）
       const TOOL_FILES = {
-        merge: 'merge/excel-csv-merge.zip'
+        merge: 'merge/excel-csv-merge.zip',
+        cleanse: 'cleanse/moji-yure-cleanse.zip',
+        split: 'split/file-auto-split.zip'
       };
       // 購入済みツールID。Supabaseの purchases テーブル（Stripe Webhookが登録）から取得する
       let purchased = [];
